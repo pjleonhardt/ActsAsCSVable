@@ -1,0 +1,50 @@
+== ActsAsCSVable
+
+This plugin allows you to export ActiveRecord objects as CSV, along with proving support for responding to the CSV format (via URL). 
+
+=== Installation
+Add http://svn.peterleonhardt.com/rails_plugins/acts_as_csvable/trunk as an external in your vendor/plugins directory 
+
+=== Usage
+Once included as a plugin in your Rails app, you can use the new functionality right away.
+
+You can apply the to_csv method to instances of ActiveRecord objects, or the classes themselves. 
+
+People.find_all_by_first_name("Peter").to_csv
+or
+People.to_csv (performs a People.find(:all)) 
+
+You can also use the respond_to method to respond to .csv requests
+
+url /people.csv
+
+  def index
+    @people = Person.find(:all)
+    
+    respond_to do |wants|
+      wants.csv { render :text => @people.to_csv(:columns => [:first_name, :last_name, :date_of_birth]) }
+    end
+  end
+
+You can also determine which columns (or functions) you want to export. Simply define an export template in your model with an array of the columns you wan't exported.
+
+There are more detailed examples in the documentation files. 
+
+=== Options
+There are multiple ways to specify which columns you want to export with the CSV. 
+The first, and default, way is to define an export template in the model that you are exporting. This takes an array of column names. The names of the methods will be used as the Header Row for the CSV and then subsequent rows will call the method on the object. Because of the way this is set up it is possible to specify not just attributes, but any method that returns a string. Alternatively, you may pass a hash instead of an array, where the keys are used for the header row and the values used as the method to be called.
+
+You can even call methods through associations, if needed:
+      @properties.to_csv(:columns => {:owner_name => "owner.name", :address => "address"})
+
+- :template. This allows you to be able to specify conditions for use of different columns
+     #in your model
+      acts_as_csv_exportable :fancy_naming, [{:first => "first_name"}, {:last => "last_name"}, {:email => "email_address"}, {:address => "mailing_address"}]
+      acts_as_csv_exportable :detailed, [:first_name, :last_name, :email_address, :mailing_address]
+      acts_as_csv_exportable :default, [:first_name, :last_name]
+
+- :columns. This allows you to pass an array of columns into the to_csv method. This is useful if you are dynamically generating which columns you want to export.
+   @proposal.to_csv(:columns => ["title", "amount", "proposer.first_name"]). You can also pass this a hash of the form expected in acts_as_csv_exportable.
+Note: The :columns option take precedence over the :template option if both are specified.
+=== License
+This code is provided under the MIT License, which can be found in the LICENSE file
