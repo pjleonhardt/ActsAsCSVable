@@ -1,5 +1,5 @@
 # A general wrapper for the Exceptions used by ActsAsCSVable. 
-# == Options
+# == Module Variables
 # *<tt>allow_dynamic_import_template_generation</tt> - If no import template is found that matches the header
 # rows of the import file, it will "dynamically create" an import template if, and only if, +all+ of the header names
 # easily map to writer methods on your model. This might be useful for when you have dynamically generated user selected
