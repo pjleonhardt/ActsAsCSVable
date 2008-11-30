@@ -139,7 +139,7 @@ module ActsAsCSVExportable
         # to the item, breaking apart chained methods and sending those individually.
         #
         def get_column_value(method)#:nodoc:
-          parts = method.to_s.split
+          parts = method.to_s.split(".")
           
           response = self
           parts.each do |part|
