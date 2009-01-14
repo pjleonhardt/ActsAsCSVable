@@ -111,9 +111,9 @@ module ActsAsCSVExportable
           @@csv_export_templates[self.to_s.to_sym] || {}
         end
         
-        # Get the hash pairs for a specific template. If nil is passed, returns default template.
-        # Default template +can+ be overwriten in your model!
-        #
+        def column_definitions_to_header_row(columns)#:nodoc:
+          columns.map { |c| c.keys.first.to_s.gsub('_', ' ').titleize }
+        end
 
       end # end ClassMethods
     

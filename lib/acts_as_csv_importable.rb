@@ -138,7 +138,7 @@ module ActsAsCSVImportable
         end
         
         def all_csv_import_templates#:nodoc:
-          @@csv_import_templates[self.to_s.to_sym]
+          @@csv_import_templates[self.to_s.to_sym] || {}
         end
         
         def find_methods_from_header_row(row)
@@ -148,6 +148,13 @@ module ActsAsCSVImportable
               return hash_array.map{|c| c.values.first.to_s }
             end
           end
+          
+          # if this is the default template
+          if row.map {|c| c.downcase.gsub(/ /, '_')}.map(&:strip) == get_csv_import_columns(:default).map(&:values).flatten.map(&:strip)
+            return get_csv_import_columns(:default).map(&:values).flatten.map(&:strip)
+          end            
+            
+          
           if ::ActsAsCSVable.allow_dynamic_import_template_generation
             #change header row to method names...
             method_names = row.map {|e| e.downcase.gsub(/ /, '_') }

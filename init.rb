@@ -16,13 +16,13 @@ end
   
 require 'array'
 
-
-
 ActiveRecord::Base.class_eval do
   include ActsAsCSVExportable::ActiveRecord::Exporting
   include ActsAsCSVImportable::ActiveRecord::Importing
 end
-# add the csv MimeType
-Mime::Type.register 'text/csv', :csv, %w('text/comma-separated-values')
 
+
+require 'action_controller' #to load Mime module
+# add the csv MimeType
+Mime::Type.register 'text/csv', :csv, %w(text/comma-separated-values)
 
