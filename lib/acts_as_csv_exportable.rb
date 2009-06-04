@@ -1,42 +1,41 @@
-module ActsAsCSVExportable
-  module ActiveRecord
-      
-    # == CSV Exporting
-    # ActsAsCSVExportable is to facilitate the easy exporting of ActiceRecord Objects by means of CSV without the need for messy
-    # CSV building and streaming in your controller. With the simple, easy to use, ActiveRecord extension, you can succinctly define
-    # reusable export templates, that are accessible anywhere in your application that your model is!
-    #
-    # === Usage
-    #     #project.rb
-    #     class Project < ActiveRecord::Base
-    #       acts_as_csv_exportable :default, [:id, :name, :description, { :client => "client.name"}]
-    #       acts_as_csv_exportable :detailed, [:id, :name. :description, { :client => "client.name}, :projected_cost, :projected_profit, :formatted_proposed_completion_date]
-    #      #...
-    #     end
-    # We will use the Project model outlined above in the examples to follow:
-    # 
-    # Simply, using the acts_as_csv_exportable templates defined in our Project model, we export
-    # our subset of Project instances to csv based on user input from a form
-    # 
-    #   #clients_controllers.rb
-    #   def projects
-    #     @client = Client.find(params[:id])
-    #     @projects = @client.projects
-    #     template = params[:export_template]
-    #
-    #     responds_to do |wants|
-    #       wants.html
-    #       wants.csv { render :text => @projects.to_csv(:template => template) }
-    #     end
-    #   end
-    #
-    module Exporting
+module ActsAsCSVExportable#:nodoc:
+  module ActiveRecord#:nodoc:
+    module Exporting#:nodoc:
       
       def self.included(base)#:nodoc:
         base.extend(ClassMethods)
         base.class_eval { include InstanceMethods }
       end
-        
+      
+      # == CSV Exporting
+      # ActsAsCSVExportable is to facilitate the easy exporting of ActiceRecord Objects by means of CSV without the need for messy
+      # CSV building and streaming in your controller. With the simple, easy to use, ActiveRecord extension, you can succinctly define
+      # reusable export templates, that are accessible anywhere in your application that your model is!
+      #
+      # === Usage
+      #     #project.rb
+      #     class Project < ActiveRecord::Base
+      #       acts_as_csv_exportable :default, [:id, :name, :description, { :client => "client.name"}]
+      #       acts_as_csv_exportable :detailed, [:id, :name. :description, { :client => "client.name}, :projected_cost, :projected_profit, :formatted_proposed_completion_date]
+      #      #...
+      #     end
+      # We will use the Project model outlined above in the examples to follow:
+      # 
+      # Simply, using the acts_as_csv_exportable templates defined in our Project model, we export
+      # our subset of Project instances to csv based on user input from a form
+      # 
+      #   #clients_controllers.rb
+      #   def projects
+      #     @client = Client.find(params[:id])
+      #     @projects = @client.projects
+      #     template = params[:export_template]
+      #
+      #     responds_to do |wants|
+      #       wants.html
+      #       wants.csv { render :text => @projects.to_csv(:template => template) }
+      #     end
+      #   end
+      #  
       module ClassMethods
         @@csv_export_templates = {}
 
@@ -64,8 +63,10 @@ module ActsAsCSVExportable
           add_csv_export_template(template.to_sym, column_hashes)
         end
         
-        # Simpy a shortcut allowing you to call Project.to_csv(:tempate => :everything) rather than doing
-        # Project.find(:all).to_csv(:template => :everything)
+        # Simpy a shortcut allowing you to call 
+        #   Project.to_csv(:tempate => :everything) 
+        # rather than doing
+        #   Project.find(:all).to_csv(:template => :everything)
         #
         def to_csv(*args)
           find(:all).to_csv(*args)   
@@ -117,7 +118,7 @@ module ActsAsCSVExportable
 
       end # end ClassMethods
     
-      module InstanceMethods
+      module InstanceMethods#:nodoc:
         # This returns a CSV row of an item's data. Used by Array.to_csv
         # if columns are specified, they take priority over a template
         def to_row(options = {})#:nodoc:

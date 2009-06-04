@@ -1,47 +1,47 @@
-module ActsAsCSVImportable
-  module ActiveRecord
-          
-    # == ActsAsCSVImportable
-    # ActsAsCSVImporting is to facilitate the easy importing of ActiceRecord Objects by means of CSV without the need for messy
-    # model specific deductions as to what to do with data, and how to import it. Simply define an acts_as_csv_importable template in
-    # your model and you're good to go!
-    #
-    # === Usage
-    #   #project.rb
-    #   class Project < ActiveRecord::Base
-    #     acts_as_csv_importable :new_projects, [{:project_name => :name}, {:project_description => :description}, #... 
-    #     #...
-    #   end
-    #
-    # We will use the Project model outlined above in the examples to follow:
-    # 
-    # Simply, using the acts_as_csv_importable templates defined in our Project model, we export
-    # our subset of Project instances to csv based on user input from a form
-    # 
-    #   #clients_controller.rb
-    #   def update_projects
-    #     file = params[:csv_file]
-    #     template = params[:csv_upload_template]
-    #     @client = Client.find(params[:id])
-    #     
-    #     projects = Project.from_csv(file, template)
-    #     if projects.all?(&:valid?)
-    #       client.projects = projects
-    #       client.save
-    #       #untested caveat of doing this:
-    #       #  if project has a 'validate_uniqueness_of' on any of the updated columns, and two of the 
-    #       #  uploaded projects have the same value, but none in the database, your all?(&:valid) should pass
-    #       #  but your save should fail! I suggest enforcing transactions around the save.
-    #     else
-    #       #tell user which projects are invalid...
-    #     end
-    #   end
-    #
-    module Importing
+module ActsAsCSVImportable#:nodoc:
+  module ActiveRecord#:nodoc:
+
+    module Importing#:nodoc:
       def self.included(base)#:nodoc:
         base.extend(ClassMethods)
       end
       
+      # == ActsAsCSVImportable
+      # ActsAsCSVImporting is to facilitate the easy importing of ActiceRecord Objects by means of CSV without the need for messy
+      # model specific deductions as to what to do with data, and how to import it. Simply define an acts_as_csv_importable template in
+      # your model and you're good to go!
+      #
+      # === Usage
+      #   #project.rb
+      #   class Project < ActiveRecord::Base
+      #     acts_as_csv_importable :new_projects, [{:project_name => :name}, {:project_description => :description}, #... 
+      #     #...
+      #   end
+      #
+      # We will use the Project model outlined above in the examples to follow:
+      # 
+      # Simply, using the acts_as_csv_importable templates defined in our Project model, we export
+      # our subset of Project instances to csv based on user input from a form
+      # 
+      #   #clients_controller.rb
+      #   def update_projects
+      #     file = params[:csv_file]
+      #     template = params[:csv_upload_template]
+      #     @client = Client.find(params[:id])
+      #     
+      #     projects = Project.from_csv(file, template)
+      #     if projects.all?(&:valid?)
+      #       client.projects = projects
+      #       client.save
+      #       #untested caveat of doing this:
+      #       #  if project has a 'validate_uniqueness_of' on any of the updated columns, and two of the 
+      #       #  uploaded projects have the same value, but none in the database, your all?(&:valid) should pass
+      #       #  but your save should fail! I suggest enforcing transactions around the save.
+      #     else
+      #       #tell user which projects are invalid...
+      #     end
+      #   end
+      #
       module ClassMethods
         @@csv_import_templates = {}
         
@@ -141,7 +141,7 @@ module ActsAsCSVImportable
           @@csv_import_templates[self.to_s.to_sym] || {}
         end
         
-        def find_methods_from_header_row(row)
+        def find_methods_from_header_row(row)#:nodoc:
           all_csv_import_templates.each do |template, hash_array|
             column_headers = column_definitions_to_header_row(hash_array)
             if column_headers == row
@@ -171,7 +171,7 @@ module ActsAsCSVImportable
           columns.map { |c| c.keys.first.to_s.gsub('_', ' ').titleize }
         end
       
-        def from_csv_row(methods, data_array)
+        def from_csv_row(methods, data_array)#:nodoc:
           data_array.each { |c| c.strip! unless c.blank? }
           
           pk_placement = 0

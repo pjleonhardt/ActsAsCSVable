@@ -1,6 +1,8 @@
 class Array 
-  def to_csv(options = {})
-    
+
+  # Takes elements of the array, and generates CSV for each element based on a given template / columns
+  #
+  def to_csv(options = {})    
     if all? { |e| e.respond_to?(:to_row) } and not empty?
       columns = options.delete(:columns)
       template = options.delete(:template)
