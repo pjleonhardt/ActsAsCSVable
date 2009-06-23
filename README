@@ -1,18 +1,21 @@
 == ActsAsCSVable
 This plugin allows you to export and import ActiveRecord objects via CSV, along with proving support for responding to the CSV format (via URL). 
 === Version
-* The current stable version is 1.0
+* The current stable version is 1.0.2
+
+=== Repository
+git://github.com/pjleonhardt/ActsAsCSVable.git
+
 === Installation
 Stable Build: 
-Add http://svn.peterleonhardt.com/rails_plugins/acts_as_csvable/stable/1.0 as an external in your vendor/plugins directory 
+Add http://svn.peterleonhardt.com/rails_plugins/acts_as_csvable/stable/1.0.2 as an external in your vendor/plugins directory 
 
 Trunk:
-http://svn.peterleonhardt.com/rails_plugins/acts_as_csvable/trunk
+http://github.com/pjleonhardt/ActsAsCSVable/tree/master
 
-Development:
-http://svn.peterleonhardt.com/rails_plugins/acts_as_csvable/development/vendor/plugins/acts_as_csvable
 === Project Management
-http://redmine.peterleonhardt.com/projects/show/acts-as-csvable
+http://github.com/pjleonhardt/ActsAsCSVable/issues
+
 === Usage
 Once included as a plugin in your Rails app, you can use the new functionality right away.
 
@@ -57,7 +60,7 @@ url /people.csv
 
 You can also determine which columns (or functions) you want to export. Simply define an export template in your model with an array of the columns you wan't exported.
 
-There are more detailed examples in the documentation files. 
+There are more detailed examples in the documentation files (inline documentation, run rake doc:plugins for the latest)
 
 === Options
 There are multiple ways to specify which columns you want to export with the CSV. 
