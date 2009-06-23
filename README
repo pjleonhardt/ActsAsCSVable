@@ -1,15 +1,10 @@
 == ActsAsCSVable
 This plugin allows you to export and import ActiveRecord objects via CSV, along with proving support for responding to the CSV format (via URL). 
-=== Version
-* The current stable version is 1.0.2
 
 === Repository
 git://github.com/pjleonhardt/ActsAsCSVable.git
 
 === Installation
-Stable Build: 
-Add http://svn.peterleonhardt.com/rails_plugins/acts_as_csvable/stable/1.0.2 as an external in your vendor/plugins directory 
-
 Trunk:
 http://github.com/pjleonhardt/ActsAsCSVable/tree/master
 
