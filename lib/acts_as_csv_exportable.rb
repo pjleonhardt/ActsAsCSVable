@@ -140,13 +140,19 @@ module ActsAsCSVExportable#:nodoc:
         # to the item, breaking apart chained methods and sending those individually.
         #
         def get_column_value(method)#:nodoc:
-          parts = method.to_s.split(".")
+          response = nil
           
-          response = self
-          parts.each do |part|
-            response = response.send(part) if response.respond_to?(part)
+          if method.is_a?(Proc)
+            response = method.call(self)
+          else
+            parts = method.to_s.split(".")
+            
+            response = self
+            parts.each do |part|
+              response = response.send(part) if response.respond_to?(part)
+            end
+            response = nil if response == self
           end
-          response = nil if response == self
           
           return response
         end

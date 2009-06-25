@@ -71,12 +71,20 @@ You can even call methods through associations, if needed:
       acts_as_csv_exportable :default, [:id, :first_name, :last_name]
 
 	  acts_as_csv_importable :default, [:id, :first_name, :last_name]
-	  acts_as_csv_importbale :new_projects, [:name, :details, :owner_username]
+	  acts_as_csv_importable :new_projects, [:name, :details, :owner_username]
+	
+	  -For customized fields-
+	  You can define a method on the model and use that in your template or columns array
+		def formatted_date
+	    	self.date.strftime("%Y/%M/%D")
+	  	end
+	  	acts_as_csv_importable :formatted_template => [:formatted_date => 'formatted_date' ]
+	
+	  -OR-
+	  You can use a proc to evaluate a field on the fly for more customization
+	  	acts_as_csv_importable :fancy_formatted_proc, [:formatted_date => Proc.new {|x| x.date.strftime("%Y/%M/%D")} ]
 	  
-	  def formatted_date
-	    self.date.strftime("%Y/%M/%D")
-	  end
-	  
+		  
 	  def owner_username=(username)
 	    self.owner = Users.find_by_username(username)
 	  end
