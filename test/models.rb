@@ -10,6 +10,7 @@ class Project < ActiveRecord::Base
   belongs_to :client
   
   acts_as_csv_exportable :default, [{:project_name => :name}, {:project_description => :description}, {:client_name => 'client.full_name'}, {:deadline => 'formatted_deadline'}]
+  acts_as_csv_exportable :proc, [{:project_name => :name}, {:deadline => Proc.new {|x| x.deadline.strftime("%m/%d/%Y")}}]
   acts_as_csv_exportable :simple, [:project_name => :name]
   
   acts_as_csv_importable :user_defined, [:id, :name, :description]

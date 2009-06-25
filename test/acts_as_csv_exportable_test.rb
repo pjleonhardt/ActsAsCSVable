@@ -23,6 +23,10 @@ class ActsAsCSVExportableTest < Test::Unit::TestCase
     def test_to_csv_should_render_correct_results
       assert_equal "Project Name,Project Description,Client Name,Deadline\nMy Project,Described,Joe Schmoe,#{@time.strftime('%m/%d/%Y')}\n", @client.projects.to_csv    
     end
+    
+    def test_to_csv_using_proc_should_render_correct
+      assert_equal "Project Name,Deadline\nMy Project,#{@time.strftime('%m/%d/%Y')}\n", @client.projects.to_csv(:template => :proc)
+    end
   
     def test_to_csv_with_template_specified_should_render_correct
       assert_equal "Project Name\nMy Project\n", @client.projects.to_csv(:template => :simple)
