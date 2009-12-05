@@ -94,18 +94,37 @@ module ActsAsCSVImportable#:nodoc:
         #     end
         #   end
         #
-        def from_csv(csv_file, template = nil)
+        # === Arguments
+        # *+csv_file+: The uploaded file object
+        # *+template+: Tells ActsAsCSVable which template to apply to this upload
+        #   * The name of a predefined template (e.g, :advanced_template)
+        #   * An array of columns (e.g, [:name, :birth_date, :username])
+        #   * A value of _nil_ will tell ActsAsCSVable to create a template on the fly based on the column headers (first row only). The option allow_dynamic_import_template_generation must be turned on for this to work.
+        # === Options
+        # *+skip+: Skip n number of rows at the top of the file before importing (defaults to 1)
+        #    from_csv(file, template, :skip => 3)
+        #
+        def from_csv(csv_file, template = nil, options = {})
           raise ::ActsAsCSVable::MissingGemException.new("Need FasterCSV gem to use ActsAsCSVImportable") unless defined? FasterCSV
           
-          methods = get_csv_import_columns(template).map { |c| c.values.first.to_s } unless template.blank?
+          rows_to_skip = options[:skip] || 1
+          unless template.blank?
+            if(template.is_a? Symbol)
+              methods = get_csv_import_columns(template).map { |c| c.values.first.to_s }
+            elsif template.is_a? Array # or template.is_a? Hash
+              # columns have been passed in, let rails throw any unknown method errors
+              methods = template
+            end
+          end
+
           
           count = 0
           objects = []
           
           FasterCSV.parse(csv_file.read) do |row|
-            if count > 0 #past header row
+            if count > rows_to_skip - 1 #past header row
               objects << from_csv_row(methods, row)
-            else
+            elsif count == 0 # first pass
               #if template not passed, try to find from the header row 
               methods ||= find_methods_from_header_row(row)
             end

@@ -57,9 +57,16 @@ class ActsAsCSVVImportableTest < Test::Unit::TestCase
     assert_equal "Joe Schmoe", @projects[1].client.full_name
   end 
   
-  def test_sdomething
-    puts Mime::Type.lookup_by_extension('html').inspect
-    puts Mime::Type.lookup_by_extension('csv').inspect
+  def test_skipping_n_rows
+      @projects = Project.from_csv(@user_defined_file, :user_defined, :skip => 2)
+       assert_equal "ProjectX", @projects.first.name
+       assert_equal 2, @projects.size
+  end
+  
+  def test_pass_in_import_columns
+    # import the columns in backwards. Name as description, description as name.
+    @projects = Project.from_csv(@def_file, [:description, :name])
+    assert_equal "A Description", @projects.first.name
   end
     
 end
