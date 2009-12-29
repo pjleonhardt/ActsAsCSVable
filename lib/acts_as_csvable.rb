@@ -13,4 +13,8 @@ module ActsAsCSVable#:nodoc:
   class MissingImportTemplateException < ActsAsCSVableException; end#:nodoc:
     
   mattr_accessor :allow_dynamic_import_template_generation
+  
+  def self.version
+    ActsAsCSVable::Version::STRING
+  end
 end # ActsAsCSVable
