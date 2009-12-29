@@ -47,7 +47,7 @@ module ActsAsCSVExportable#:nodoc:
         #     #proposal.rb
         #     class Proposal < ActiveRecord::Base
         #       acts_as_csv_exportable :default, [:id, :name, :description, { :client => "client.name"}]
-        #       acts_as_csv_exportable :detailed, [:id, :name. :description, { :client => "client.name}, :projected_cost, :projected_profit, :formatted_proposed_completion_date]
+        #       acts_as_csv_exportable :detailed, [:id, :name. :description, { :client => "client.name"}, :projected_cost, :projected_profit, :formatted_proposed_completion_date]
         #      #...
         #     end
         #
@@ -57,6 +57,7 @@ module ActsAsCSVExportable#:nodoc:
         # * As a symbol: The symbol will be used as both a column header and a method to call
         # * As a string: Same as symbol, but this allows you to do method chaining ("client.name")
         # * As a hash: Allows you to specify both a column header and a method ( [{:a_name => :a_method}, {:another_name => "some.chained.method"}] )
+        # * As a hash with a Proc: Allows you to specify a column header and a Proc to be executed at run time ( {:fancy => Proc.new {|x| x.client.name(:full) } } )
         #
         def acts_as_csv_exportable(template, column_array)
           column_hashes = convert_all_elements_to_hash(column_array)
@@ -113,6 +114,7 @@ module ActsAsCSVExportable#:nodoc:
         end
         
         def column_definitions_to_header_row(columns)#:nodoc:
+          # use .gsub() here to maintain "_id" prefixes, e.g. something_id => 'Something Id' rather than 'Something'
           columns.map { |c| c.keys.first.to_s.gsub('_', ' ').titleize }
         end
 
