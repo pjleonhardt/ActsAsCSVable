@@ -105,7 +105,6 @@ module ActsAsCSVImportable#:nodoc:
         #    from_csv(file, template, :skip => 3)
         #
         def from_csv(csv_file, template = nil, options = {})
-          raise ::ActsAsCSVable::MissingGemException.new("Need FasterCSV gem to use ActsAsCSVImportable") unless defined? FasterCSV
           
           rows_to_skip = options[:skip] || 1
           unless template.blank?
@@ -121,7 +120,7 @@ module ActsAsCSVImportable#:nodoc:
           count = 0
           objects = []
           
-          FasterCSV.parse(csv_file.read) do |row|
+          CSV.parse(csv_file.read) do |row|
             if count > rows_to_skip - 1 #past header row
               objects << from_csv_row(methods, row)
             elsif count == 0 # first pass

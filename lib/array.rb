@@ -18,13 +18,7 @@ class Array
       content_rows = map { |e| e.to_row(:columns => columns) }.map(&:to_csv)
       ([header_row] + content_rows).join
     else 
-      if defined? FasterCSV
-        FasterCSV.generate_line(self)
-      else
-        buffer = ''
-        CSV.generate_row(self, self.size, buffer)
-        buffer
-      end
+      CSV.generate_line(self)
     end
   end
 end # end Array

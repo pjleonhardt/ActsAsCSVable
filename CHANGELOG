@@ -1,3 +1,9 @@
+2010-01-28
+---------------------
+* Bumped Version to 2.0.0. 2.x versions will be Rails 3+
+* Removed FasterCSV for Ruby 1.9 / Rails 3
+* Misc cleanup in init.rb for Rails 3
+
 2009-12-29
 ----------------------
 * Tweaked a bit of the Documentation for typos and to reflect support for Procs
