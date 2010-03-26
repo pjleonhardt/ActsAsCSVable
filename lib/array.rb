@@ -16,7 +16,7 @@ class Array
       
       header_row =  first.class.column_definitions_to_header_row(columns).to_csv
       content_rows = map { |e| e.to_row(:columns => columns) }.map(&:to_csv)
-      ([header_row] + content_rows).join
+      ([header_row] + content_rows).join("\n")
     else 
       if defined? FasterCSV
         FasterCSV.generate_line(self)
