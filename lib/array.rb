@@ -16,7 +16,11 @@ class Array
       
       header_row =  first.class.column_definitions_to_header_row(columns).to_csv
       content_rows = map { |e| e.to_row(:columns => columns) }.map(&:to_csv)
+<<<<<<< HEAD
       ([header_row] + content_rows).join
+=======
+      ([header_row] + content_rows).join("\n")
+>>>>>>> 3efaba9... Fixed problem with line feeds.
     else 
       CSV.generate_line(self)
     end
